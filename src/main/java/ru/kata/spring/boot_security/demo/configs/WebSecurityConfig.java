@@ -42,14 +42,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll();
     }
 
-    @Bean
-    public PasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder(12);
-    }
+
 
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userService).passwordEncoder(bCryptPasswordEncoder());
+        auth.userDetailsService(userService).passwordEncoder(successUserHandler.bCryptPasswordEncoder());
     }
 
 }

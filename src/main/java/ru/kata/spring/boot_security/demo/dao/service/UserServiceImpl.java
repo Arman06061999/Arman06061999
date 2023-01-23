@@ -23,22 +23,20 @@ public class UserServiceImpl implements UserService {
 
 
     private final UserDaoImpl userDao;
-
-    public PasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder(12);
-    }
+    private final PasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
-    public UserServiceImpl( UserDaoImpl userDao) {
-
+    public UserServiceImpl(UserDaoImpl userDao, PasswordEncoder bCryptPasswordEncoder) {
         this.userDao = userDao;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
-
 
     public boolean add(User user) {
         User userBas = userDao.findByName(user.getUsername());
-        if(userBas != null) {return false;}
-        user.setPassword(bCryptPasswordEncoder().encode(user.getPassword()));
+        if (userBas != null) {
+            return false;
+        }
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userDao.add(user);
         return true;
     }
@@ -52,6 +50,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public void update(User us) {
+        us.setPassword(bCryptPasswordEncoder.encode(us.getPassword()));
         userDao.update(us);
     }
 
